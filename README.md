@@ -71,7 +71,7 @@ This was a single continuous GitHub Copilot app session. The first four prompts 
 |---|---|
 | Session time (first response to last response) | **~41 minutes** |
 | AI credits used (estimated) | **~912 credits** |
-| | **(~$9.12)** |
+| Estimated dollar cost | **$9.12** |
 
 Session time is measured from the timestamp of Astra's first reply to its last reply in this session (spanning the four prompts above), as reported by the platform's own usage records — not a manual stopwatch.
 
