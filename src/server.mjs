@@ -1,5 +1,6 @@
 import http from 'node:http';
 import { readFile } from 'node:fs/promises';
+const port = Number(process.env.PORT || 4178);
 http.createServer(async (req, res) => {
   if (req.url?.split('?')[0] !== '/') { res.writeHead(404); res.end(); return; }
   try {
@@ -10,4 +11,4 @@ http.createServer(async (req, res) => {
     console.error(error);
     res.writeHead(500); res.end('Unable to load chess.html');
   }
-}).listen(4178, '127.0.0.1', () => console.log('Chess ready at http://127.0.0.1:4178'));
+}).listen(port, '127.0.0.1', () => console.log(`Chess ready at http://127.0.0.1:${port}`));

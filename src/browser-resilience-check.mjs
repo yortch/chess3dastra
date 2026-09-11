@@ -15,7 +15,7 @@ async function pageWithState({ noWebGL = false, saved } = {}) {
   });
   const page = await context.newPage();
   page.on('pageerror', error => errors.push(error.message));
-  await page.goto('http://127.0.0.1:4178');
+  await page.goto(process.env.CHESS_URL || 'http://127.0.0.1:4178');
   if (saved) {
     await page.evaluate(saved => localStorage.setItem('atelier-chess', JSON.stringify(saved)), saved);
     await page.reload();

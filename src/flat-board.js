@@ -1,3 +1,5 @@
+import { knightFacesRight } from './piece-orientation.js';
+
 const silhouettes = {
   p: '<circle cx="24" cy="13" r="6"/><path d="M20 19h8l-1 7 5 9H16l5-9z"/>',
   n: '<path d="M14 35c0-8 1-14 7-19l-2-7 7 3 4-4 1 9 7 7-3 6-9-3-2 8z"/><path d="M25 18l2 1m3 8-5-4" fill="none"/>',
@@ -36,7 +38,8 @@ export function createFlatBoard(container, onSelect, names) {
         ].filter(Boolean).join(' ');
         button.setAttribute('aria-pressed', String(selected === square));
         button.setAttribute('aria-label', `${square}: ${piece ? `${piece.color === 'w' ? 'White' : 'Black'} ${names[piece.type]}` : 'empty'}${isLegal ? ', legal destination' : ''}${isCheck ? ', in check' : ''}`);
-        const svg = piece ? `<svg class="flat-piece ${piece.color === 'b' ? 'black' : ''}" viewBox="0 0 48 48" aria-hidden="true">${silhouettes[piece.type]}<path d="M15 35h18l3 7H12z"/><path d="M14 38h20" fill="none"/></svg>` : '';
+        const mirror = piece?.type === 'n' && !knightFacesRight(square, bottom);
+        const svg = piece ? `<svg class="flat-piece ${piece.color === 'b' ? 'black' : ''}" viewBox="0 0 48 48" aria-hidden="true"><g${mirror ? ' transform="translate(48 0) scale(-1 1)"' : ''}>${silhouettes[piece.type]}<path d="M15 35h18l3 7H12z"/><path d="M14 38h20" fill="none"/></g></svg>` : '';
         const fileLabel = rank === (bottom === 'w' ? 1 : 8) ? `<span class="square-coordinate square-file" aria-hidden="true">${square[0]}</span>` : '';
         const rankLabel = file === (bottom === 'w' ? 0 : 7) ? `<span class="square-coordinate square-rank" aria-hidden="true">${rank}</span>` : '';
         const content = svg + fileLabel + rankLabel;

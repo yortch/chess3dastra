@@ -15,7 +15,7 @@ async function loadPosition(game, human = 'w') {
   await page.locator('#flat-view').waitFor();
 }
 try {
-  await page.goto('http://127.0.0.1:4178');
+  await page.goto(process.env.CHESS_URL || 'http://127.0.0.1:4178');
   await page.locator('#view-2d').click();
   assert.equal(await page.locator('#flat-board button').count(), 64);
   assert.equal(await page.locator('#flat-board svg').count(), 32);

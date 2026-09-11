@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { Chess } from 'chess.js';
 import { createFlatBoard } from './flat-board.js';
+import { knightFacesRight } from './piece-orientation.js';
 
 const $ = id => document.getElementById(id);
 const game = new Chess();
@@ -169,9 +170,10 @@ function makePiece(piece) {
     shape.lineTo(.03, .77); shape.lineTo(-.045, .61); shape.lineTo(-.15, .69);
     shape.lineTo(-.24, .40); shape.closePath();
     const horse = mesh(new THREE.ExtrudeGeometry(shape, { depth: .22, bevelEnabled: true, bevelThickness: .035, bevelSize: .035, bevelSegments: 2, steps: 1 }), mat, group, 0, h + .02, -.11);
-    horse.rotation.y = piece.color === 'w' ? Math.PI / 2 : -Math.PI / 2;
-    horse.position.x = piece.color === 'w' ? -.11 : .11;
-    horse.position.z = 0;
+    const facesRight = knightFacesRight(piece.square);
+    horse.rotation.y = facesRight ? 0 : Math.PI;
+    // Center the extrusion's depth after turning the head.
+    horse.position.z = facesRight ? -.11 : .11;
   }
   group.position.copy(position(piece.square));
   pieces.add(group);
