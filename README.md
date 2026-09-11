@@ -1,6 +1,6 @@
 # chess3dastra
 
-A fully playable 3D (and 2D) chess game against a local computer opponent — built end-to-end in [GitHub Copilot CLI](https://github.com/features/copilot) as a hands-on test of **GPT‑6‑Astra**.
+A fully playable 3D (and 2D) chess game against a local computer opponent — built end-to-end in the [GitHub Copilot app](https://github.com/features/copilot) as a hands-on test of **GPT‑6‑Astra**.
 
 **▶ Play it live:** https://yortch.github.io/chess3dastra/ *(GitHub Pages, static, no server)*
 
@@ -14,7 +14,7 @@ Full chess rules (castling, en passant, promotion, draws), three computer diffic
 
 ## The experiment
 
-This repo exists to document a real, unscripted session testing **GPT‑6‑Astra** (via GitHub Copilot's "Auto" model routing) on a non-trivial, self-contained build task: a 3D game with an AI opponent, built from a single one-line prompt, then iterated on.
+This repo exists to document a real, unscripted session testing **GPT‑6‑Astra** (via GitHub Copilot's "Auto" model routing) on a non-trivial, self-contained build task: a 3D game with an AI opponent, built from a single one-line prompt, then iterated on — all inside the [GitHub Copilot app](https://github.com/features/copilot), not the CLI.
 
 ### Prompts used, verbatim, in order
 
@@ -63,28 +63,21 @@ Prompt 4 asked the model to fix all three. It did, then wrote three new dedicate
 
 ---
 
-## Time and token usage
+## Time and AI credits used
 
-This was a single continuous GitHub Copilot CLI session. All four prompts above (initial build → 2D view → rubber-duck review → fixes) were served by **GPT‑6‑Astra**, before the session's model was later switched (by the platform's Auto routing) to Claude Sonnet 5 for an unrelated follow-up (this GitHub Pages deployment).
+This was a single continuous GitHub Copilot app session. The first four prompts above (initial build → 2D view → rubber-duck review → fixes) were served by **GPT‑6‑Astra**, before the session's model was later switched (by the platform's Auto routing) to Claude Sonnet 5 for an unrelated follow-up (this GitHub Pages deployment).
 
-| Phase | Prompt → next prompt | Elapsed wall-clock time* |
-|---|---|---|
-| Initial 3D build (playable vs. computer) | `Build a 3D Chess...` → `looks great, add a 2D view` | ~20 min |
-| Add 2D view | `looks great, add a 2D view` → `/rubber-duck` | ~17 min |
-| Rubber-duck review + implement all 3 fixes | `/rubber-duck` → *(deploy question, new model)* | ~26 min |
-| **Total, GPT‑6‑Astra portion** | | **≈ 63 min** |
-
-*\*Wall-clock time between when each prompt was sent and the next was sent — includes model "thinking"/tool-call time and a small amount of user reading time between turns, not pure inference time.*
-
-**Token usage reported by the platform for the GPT‑6‑Astra portion of this session:**
-
-| Metric | Value |
+| Metric (GPT‑6‑Astra portion only) | Value |
 |---|---|
-| API calls | 36 |
-| Input tokens | 2,351,350 |
-| Output tokens | 22,681 |
-| Cache-read tokens | 2,252,773 |
-| Cache-write tokens | 98,469 |
+| Session time (first response to last response) | **~41 minutes** |
+| AI credits used | **53** |
+| API calls | 53 |
+| Input tokens | 3,620,352 |
+| Output tokens | 32,445 |
+| Cache-read tokens | 3,367,302 |
+| Cache-write tokens | 252,891 |
+
+Session time is measured from the timestamp of Astra's first reply to its last reply in this session (spanning the four prompts above), as reported by the platform's own usage records — not a manual stopwatch.
 
 The input/cache totals are large relative to the output because the agent repeatedly re-read its own growing source files, ran multiple rounds of headless-browser tests, and inspected screenshots as part of self-verification before presenting each result as done — this is working context, not user-authored input.
 
@@ -129,4 +122,4 @@ npm test        # rules/engine unit tests
 
 ---
 
-*Built with [GitHub Copilot CLI](https://github.com/features/copilot). This README and the findings above were generated as part of the same session that built the game.*
+*Built with the [GitHub Copilot app](https://github.com/features/copilot). This README and the findings above were generated as part of the same session that built the game.*
