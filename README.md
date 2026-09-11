@@ -70,8 +70,8 @@ This was a single continuous GitHub Copilot app session. The first four prompts 
 | Metric (GPT‑6‑Astra portion only) | Value |
 |---|---|
 | Session time (first response to last response) | **~41 minutes** |
-| AI credits used (estimated) | **~912 credits** |
-| Estimated dollar cost | **$9.12** |
+| AI credits used | **~912 credits** |
+| Dollar cost | **$9.12** (1 AI credit = $0.01 USD) |
 
 Session time is measured from the timestamp of Astra's first reply to its last reply in this session (spanning the four prompts above), as reported by the platform's own usage records — not a manual stopwatch.
 
