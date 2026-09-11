@@ -63,7 +63,7 @@ Prompt 4 asked the model to fix all three. It did, then wrote three new dedicate
 
 ### User acceptance findings
 
-After playing the live game rather than only reading the code, a new issue surfaced that neither the model nor the rubber-duck pass had caught: the 3D knights weren't rendered sideways (in profile) the way the 2D knights already were. This came from the user's own chess-board familiarity, not from any testing tool or second AI review.
+After playing the live game, a new issue surfaced that neither the model nor the rubber-duck pass had caught: the 3D knights weren't rendered sideways (in profile) the way the 2D knights already were. This came from the user's own chess-board familiarity, not from any testing tool or second AI review.
 
 ---
 
