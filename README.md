@@ -70,7 +70,8 @@ This was a single continuous GitHub Copilot app session. The first four prompts 
 | Metric (GPT‑6‑Astra portion only) | Value |
 |---|---|
 | Session time (first response to last response) | **~41 minutes** |
-| AI credits used | **~650** |
+| AI credits used (observed in-app) | **~650** |
+| AI credits (calculated from token pricing, see below) | **~4,435** |
 | API calls | 53 |
 | Input tokens | 3,620,352 |
 | Output tokens | 32,445 |
@@ -80,6 +81,34 @@ This was a single continuous GitHub Copilot app session. The first four prompts 
 Session time is measured from the timestamp of Astra's first reply to its last reply in this session (spanning the four prompts above), as reported by the platform's own usage records — not a manual stopwatch.
 
 The input/cache totals are large relative to the output because the agent repeatedly re-read its own growing source files, ran multiple rounds of headless-browser tests, and inspected screenshots as part of self-verification before presenting each result as done — this is working context, not user-authored input.
+
+### Two different credit numbers, and why they don't match
+
+Two credit figures are shown above, and they disagree by roughly 7x:
+
+- **~650** is what was observed in the Copilot app's own usage/credit indicator during this session.
+- **~4,435** is calculated below from the token counts above using [GitHub's published per-token pricing for GPT‑6‑Astra](https://docs.github.com/en/enterprise-cloud@latest/copilot/reference/copilot-billing/models-and-pricing), where 1 AI credit = $0.01 USD.
+
+**GPT‑6‑Astra pricing (Default tier, ≤272K input tokens per request — applicable here, since input averaged ~68K tokens/call):**
+
+| Token type | Rate per 1M tokens |
+|---|---|
+| Input | $10.00 |
+| Cached input | $1.00 |
+| Cache write | $12.50 |
+| Output | $50.00 |
+
+**Applied to this session's totals:**
+
+| Token type | Tokens | Rate | Cost |
+|---|--:|--:|--:|
+| Input | 3,620,352 | $10.00 /1M | $36.20 |
+| Cached input | 3,367,302 | $1.00 /1M | $3.37 |
+| Cache write | 252,891 | $12.50 /1M | $3.16 |
+| Output | 32,445 | $50.00 /1M | $1.62 |
+| **Total** | | | **$44.35 → ≈ 4,435 AI credits** |
+
+The gap between the two numbers is left unresolved here rather than papered over: the in-app credit meter may apply a different accounting model (e.g. a flat per-request or plan-tier multiplier) than the public per-token rate card used for the calculation above, so they aren't expected to match exactly — but a ~7x difference suggests they're measuring genuinely different things, not just rounding.
 
 ---
 
