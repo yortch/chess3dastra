@@ -14,7 +14,7 @@ Full chess rules (castling, en passant, promotion, draws), three computer diffic
 
 ## The experiment
 
-This repo exists to document a real, unscripted session testing **GPT‑6‑Astra** (via GitHub Copilot's "Auto" model routing) on a non-trivial, self-contained build task: a 3D game with an AI opponent, built from a single one-line prompt, then iterated on — all inside the [GitHub Copilot app](https://github.com/features/copilot), not the CLI.
+This repo exists to document a real, unscripted session testing **GPT‑6‑Astra** on a non-trivial, self-contained build task: a 3D game with an AI opponent, built from a single one-line prompt, then iterated on — all inside the [GitHub Copilot app](https://github.com/features/copilot).
 
 ### Prompts used, verbatim, in order
 
@@ -65,12 +65,12 @@ Prompt 4 asked the model to fix all three. It did, then wrote three new dedicate
 
 ## Time and AI credits used
 
-This was a single continuous GitHub Copilot app session. The first four prompts above (initial build → 2D view → rubber-duck review → fixes) were served by **GPT‑6‑Astra**, before the session's model was later switched (by the platform's Auto routing) to Claude Sonnet 5 for an unrelated follow-up (this GitHub Pages deployment).
+This was a single continuous GitHub Copilot app session. The first four prompts above (initial build → 2D view → rubber-duck review → fixes) were built using **GPT‑6‑Astra**, before the session's model was later switched to Claude Sonnet 5 for an unrelated follow-up (this GitHub Pages deployment).
 
 | Metric (GPT‑6‑Astra portion only) | Value |
 |---|---|
 | Session time (first response to last response) | **~41 minutes** |
-| AI credits used | **53** |
+| AI credits used | **~650** |
 | API calls | 53 |
 | Input tokens | 3,620,352 |
 | Output tokens | 32,445 |
