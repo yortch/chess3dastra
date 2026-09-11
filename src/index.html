@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en" data-accent="coral" data-surface="flat" data-geometry="compact" data-density="comfortable" data-type="neutral" data-ambient="none">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Atelier / 3D Chess</title>
+<script>
+  (() => {
+    const param = new URLSearchParams(window.location.search).get("scoutTheme");
+    const theme =
+      param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    document.documentElement.setAttribute("data-theme", theme);
+  })();
+</script>
+<style>
+:root {
+  color-scheme: light;
+  --cp-bg: #f7f4ef;
+  --cp-bg-elevated: #fcfbf8;
+  --cp-surface: #ffffff;
+  --cp-surface-soft: #f5f5f5;
+  --cp-border: #dedede;
+  --cp-border-strong: #919191;
+  --cp-text: #242424;
+  --cp-text-muted: #5c5c5c;
+  --cp-text-soft: #6f6f6f;
+  --cp-accent: #b11f4b;
+  --cp-accent-hover: #9a1a41;
+  --cp-accent-soft: rgba(177, 31, 75, 0.08);
+  --cp-accent-fg: #ffffff;
+  --cp-success: #16a34a;
+  --cp-danger: #dc2626;
+  --cp-warning: #f59e0b;
+  --cp-link: #0078d4;
+  --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+  --cp-overlay: rgba(255, 255, 255, 0.8);
+  --cp-panel: rgba(255, 255, 255, 0.86);
+  --cp-panel-strong: rgba(255, 255, 255, 0.96);
+  --cp-sheen: rgba(255, 255, 255, 0.55);
+  --cp-highlight: rgba(177, 31, 75, 0.12);
+}
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --cp-bg: #3d3b3a;
+  --cp-bg-elevated: #343231;
+  --cp-surface: #292929;
+  --cp-surface-soft: #2e2e2e;
+  --cp-border: #474747;
+  --cp-border-strong: #5f5f5f;
+  --cp-text: #dedede;
+  --cp-text-muted: #919191;
+  --cp-text-soft: #b0b0b0;
+  --cp-accent: #fd8ea1;
+  --cp-accent-hover: #fb7b91;
+  --cp-accent-soft: rgba(253, 142, 161, 0.14);
+  --cp-accent-fg: #1a1a1a;
+  --cp-success: #4ade80;
+  --cp-danger: #f87171;
+  --cp-warning: #fbbf24;
+  --cp-link: #4da6ff;
+  --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+  --cp-overlay: rgba(41, 41, 41, 0.88);
+  --cp-panel: rgba(41, 41, 41, 0.72);
+  --cp-panel-strong: rgba(41, 41, 41, 0.96);
+  --cp-sheen: rgba(255, 255, 255, 0.04);
+  --cp-highlight: rgba(253, 142, 161, 0.12);
+}
+:root{--space:4px;--radius:10px;--mono:Consolas,"Courier New",Courier,monospace}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cp-bg);color:var(--cp-text);font-family:"Segoe UI",Aptos,Calibri,-apple-system,BlinkMacSystemFont,sans-serif}
+button,select,input{font:inherit;color:inherit}
+button,select{border:1px solid var(--cp-border);background:var(--cp-surface);border-radius:var(--radius);padding:10px 14px}
+button{cursor:pointer;transition:background .15s}
+button:hover{background:var(--cp-accent-soft);border-color:var(--cp-accent)}
+button:disabled{opacity:.45;cursor:not-allowed}
+:focus-visible{outline:2px solid var(--cp-accent);outline-offset:3px}
+.primary{background:var(--cp-accent);color:var(--cp-accent-fg);border-color:var(--cp-accent)}
+.primary:hover{background:var(--cp-accent-hover)}
+header{display:flex;align-items:center;justify-content:space-between;padding:24px 32px;border-bottom:1px solid var(--cp-border)}
+.brand{font-weight:650;font-size:20px;letter-spacing:-.6px}.brand span{color:var(--cp-text-muted);font-weight:400}
+.eyebrow{font:11px var(--mono);letter-spacing:2px;text-transform:uppercase;color:var(--cp-text-muted)}
+main{display:grid;grid-template-columns:minmax(0,1fr) 304px;min-height:calc(100vh - 83px);max-width:1800px;margin:auto}
+.arena{position:relative;min-width:0;display:flex;flex-direction:column}
+.player-bar{display:flex;align-items:center;gap:12px;padding:24px 32px;min-height:84px}
+.stone{width:12px;height:12px;border-radius:50%;background:var(--cp-text);border:1px solid var(--cp-border-strong)}
+.stone.white{background:var(--cp-bg-elevated)}
+html[data-theme="dark"] .stone{background:var(--cp-surface)}
+html[data-theme="dark"] .stone.white{background:var(--cp-text)}
+.player-name{font-weight:600;font-size:14px}.player-sub{font-size:12px;color:var(--cp-text-muted);margin-top:4px}
+.turn-label{margin-left:auto;color:var(--cp-accent);font:12px var(--mono)}
+#stage{position:relative;flex:1;min-height:420px;height:calc(100vh - 290px);max-height:900px}
+#stage canvas{position:absolute;inset:0;display:block;width:100%;height:100%;touch-action:none}
+[hidden]{display:none!important}
+#flat-view{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+#flat-board{display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr);border:4px solid var(--cp-text-muted)}
+.flat-square{position:relative;display:grid;place-items:center;padding:0;border:0;border-radius:0;min-width:0;min-height:0;background:var(--cp-border);isolation:isolate}
+.flat-square.dark{background:var(--cp-text-muted)}
+html[data-theme="dark"] .flat-square{background:var(--cp-text-soft)}
+html[data-theme="dark"] .flat-square.dark{background:var(--cp-border)}
+.flat-square:hover{background:var(--cp-border);box-shadow:inset 0 0 0 3px var(--cp-accent)}
+.flat-square.dark:hover{background:var(--cp-text-muted)}
+html[data-theme="dark"] .flat-square:hover{background:var(--cp-text-soft)}
+html[data-theme="dark"] .flat-square.dark:hover{background:var(--cp-border)}
+.flat-square.last::before,.flat-square.selected::before,.flat-square.check::before{content:"";position:absolute;inset:0;background:var(--cp-accent);opacity:.25;z-index:-1}
+.flat-square.selected::before{opacity:.65}
+.flat-square.check::before{background:var(--cp-danger);opacity:.7}
+.flat-square.legal::after{content:"";position:absolute;width:22%;height:22%;border-radius:50%;background:var(--cp-accent);pointer-events:none}
+.flat-square.legal.occupied::after{width:88%;height:88%;background:none;border:3px solid var(--cp-accent)}
+.flat-square:focus-visible{outline:3px solid var(--cp-accent);outline-offset:-3px;z-index:1}
+.flat-piece{width:84%;height:84%;fill:var(--cp-bg-elevated);stroke:var(--cp-text);stroke-width:1.7;stroke-linejoin:round;stroke-linecap:round;pointer-events:none}
+.flat-piece.black{fill:var(--cp-text);stroke:var(--cp-bg-elevated)}
+html[data-theme="dark"] .flat-piece{fill:var(--cp-text);stroke:var(--cp-surface)}
+html[data-theme="dark"] .flat-piece.black{fill:var(--cp-surface);stroke:var(--cp-text)}
+.square-coordinate{position:absolute;font:clamp(9px,1.1vw,12px) var(--mono);color:var(--cp-text);pointer-events:none;line-height:1}
+.dark .square-coordinate{color:var(--cp-bg-elevated)}
+html[data-theme="dark"] .square-coordinate{color:var(--cp-surface)}
+html[data-theme="dark"] .dark .square-coordinate{color:var(--cp-text)}
+.square-file{right:4px;bottom:3px}.square-rank{left:4px;top:3px}
+.view-controls{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding:0 16px 12px}
+.view-controls button{font-size:12px;padding:8px 12px;background:var(--cp-bg-elevated)}
+.view-mode{display:flex;gap:4px;border-right:1px solid var(--cp-border);padding-right:8px}
+.view-mode button[aria-pressed="true"]{background:var(--cp-accent);color:var(--cp-accent-fg);border-color:var(--cp-accent)}
+.hintline{text-align:center;font-size:12px;color:var(--cp-text-muted);padding:0 16px 8px}
+aside{border-left:1px solid var(--cp-border);background:var(--cp-bg-elevated);padding:28px 24px;display:flex;flex-direction:column;gap:24px}
+h1{font-size:26px;font-weight:500;letter-spacing:-.8px;margin:8px 0}
+#status-detail{font-size:13px;line-height:1.6;color:var(--cp-text-muted);margin:0}
+.controls{display:grid;gap:12px}
+label{font-size:12px;color:var(--cp-text-muted);display:grid;gap:8px}
+.button-row{display:flex;gap:8px}.button-row>*{flex:1}
+.divider{border-top:1px solid var(--cp-border);padding-top:20px}
+.history-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+#history{height:200px;overflow:auto;font:13px var(--mono)}
+.move-row{display:grid;grid-template-columns:32px 1fr 1fr;padding:8px 4px;border-radius:4px}
+.move-row:nth-child(odd){background:var(--cp-surface-soft)}.move-row span:first-child{color:var(--cp-text-muted)}
+.empty{font-family:"Segoe UI",sans-serif;color:var(--cp-text-muted);line-height:1.6;font-size:13px}
+#captured{font-size:12px;line-height:1.8;color:var(--cp-text-muted)}
+footer{margin-top:auto;font-size:11px;line-height:1.6;color:var(--cp-text-muted)}
+.notation{display:flex;gap:8px;margin-top:12px}.notation input{width:100%;min-width:0;background:var(--cp-surface);border:1px solid var(--cp-border);border-radius:var(--radius);padding:8px;font:12px var(--mono)}
+.notation button{font-size:12px;padding:8px}
+#notice{font-size:12px;color:var(--cp-danger);line-height:1.5}
+dialog{border:1px solid var(--cp-border);border-radius:16px;padding:24px;background:var(--cp-surface);color:var(--cp-text);max-width:90vw}
+dialog::backdrop{background:var(--cp-overlay)}
+dialog h2{font-size:20px;margin:0 0 16px}.promotion-choices{display:flex;gap:8px;flex-wrap:wrap}
+@media(max-width:850px){header{padding:20px}main{grid-template-columns:1fr}aside{border-left:0;border-top:1px solid var(--cp-border);display:grid;grid-template-columns:1fr 1fr}#stage{height:58vh;min-height:360px}.player-bar{padding:16px 24px}footer{grid-column:1/-1}}
+@media(max-width:480px){aside{grid-template-columns:1fr}.eyebrow.header-note{display:none}#stage{height:52vh;min-height:320px}.player-bar{padding:16px}.view-controls{gap:4px}header{padding:16px}}
+</style>
+</head>
+<body>
+<header><div class="brand">Atelier <span>/ 3D Chess</span></div><div class="eyebrow header-note">A quiet place to think.</div><button id="theme" aria-label="Toggle light or dark theme">Appearance</button></header>
+<main>
+<section class="arena" aria-label="Chess board">
+  <div class="player-bar"><div id="computer-stone" class="stone"></div><div><div class="player-name">Computer</div><div id="opponent-level" class="player-sub">Balanced opponent</div></div><div id="computer-turn" class="turn-label"></div></div>
+  <div id="stage" aria-label="Interactive chessboard. Select a piece, then a highlighted square. You can also use the move notation field."><div id="flat-view" hidden><div id="flat-board" role="group" aria-label="2D chessboard"></div></div></div>
+  <div class="view-controls"><div class="view-mode" role="group" aria-label="Board view"><button id="view-3d" aria-pressed="true">3D</button><button id="view-2d" aria-pressed="false">2D</button></div><button id="rotate">Rotate board</button><button id="top">Top view</button><button id="reset-view">Reset view</button></div>
+  <div id="board-hint" class="hintline">Click a piece, then a square. Drag to orbit. Scroll to zoom.</div>
+  <div id="render-notice" class="hintline" role="status" hidden></div>
+  <div class="player-bar"><div id="human-stone" class="stone white"></div><div><div class="player-name">You <span id="human-color" class="player-sub">/ White</span></div><div id="selection" class="player-sub">Select a piece to begin</div></div><div id="human-turn" class="turn-label">YOUR TURN</div></div>
+</section>
+<aside>
+  <section><div class="eyebrow">The position</div><h1 id="status" aria-live="polite">Your move.</h1><p id="status-detail">You play white. Make the first move.</p></section>
+  <section class="controls">
+    <label>Computer strength<select id="difficulty"><option value="easy">Casual / one move ahead</option><option value="medium" selected>Balanced / two moves ahead</option><option value="hard">Challenging / deeper search</option></select></label>
+    <label>Play as (next game)<select id="side"><option value="w">White / move first</option><option value="b">Black / computer opens</option></select></label>
+    <div class="button-row"><button id="new" class="primary">New game</button><button id="undo" disabled>Undo</button></div>
+    <form id="move-form" class="notation"><input id="move-input" aria-label="Enter move in algebraic notation or coordinates" placeholder="Move: e4 or e2e4" autocomplete="off"><button type="submit">Play</button></form>
+    <div id="notice" role="alert"></div>
+  </section>
+  <section class="divider"><div class="history-title"><span class="eyebrow">Move record</span><span id="move-count" class="eyebrow">0 plies</span></div><div id="history" aria-live="polite"><div class="empty">The board is set.<br>Your first move starts the story.</div></div></section>
+  <section class="divider"><div class="eyebrow">Off the board</div><div id="captured">No captures yet.</div></section>
+  <footer>Full chess rules, including castling, en passant, promotion, and draws. Computer analysis runs locally. Your game is saved in this browser.</footer>
+</aside>
+</main>
+<dialog id="promotion" aria-labelledby="promotion-title"><h2 id="promotion-title">Promote your pawn</h2><div class="promotion-choices"><button data-piece="q">Queen</button><button data-piece="r">Rook</button><button data-piece="b">Bishop</button><button data-piece="n">Knight</button></div><p class="empty">Escape to cancel this move.</p></dialog>
+<dialog id="new-dialog" aria-labelledby="new-game-title"><h2 id="new-game-title">Start a new game?</h2><p class="empty">This replaces the current position and move record.</p><div class="button-row"><button id="cancel-new">Keep playing</button><button id="confirm-new" class="primary">New game</button></div></dialog>
+<!-- APP -->
+</body>
+</html>
