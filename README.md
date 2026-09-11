@@ -70,20 +70,10 @@ This was a single continuous GitHub Copilot app session. The first four prompts 
 | Metric (GPT‑6‑Astra portion only) | Value |
 |---|---|
 | Session time (first response to last response) | **~41 minutes** |
-| AI credits used (estimated) | **~912 credits (~$9.12)** |
-| API calls | 53 |
+| AI credits used (estimated) | **~912 credits** |
+| | **(~$9.12)** |
 
 Session time is measured from the timestamp of Astra's first reply to its last reply in this session (spanning the four prompts above), as reported by the platform's own usage records — not a manual stopwatch.
-
-### How the ~912 figure was derived
-
-The Copilot app's own in-session credit counter tracks the *whole* session (Astra build + the later Claude Sonnet 5 follow-up work), not per-model, so it can't be read off directly for "Astra only." To isolate Astra's share:
-
-1. [GitHub's published per-token pricing](https://docs.github.com/en/enterprise-cloud@latest/copilot/reference/copilot-billing/models-and-pricing) (1 AI credit = $0.01 USD) was applied to each model's input/output/cache token counts for this session, giving a calculated cost per model.
-2. Astra accounted for **83.9%** of that combined calculated cost.
-3. That 83.9% share was applied to the session's actual observed credit total (**1,087** credits, whole session) → **~912 credits (~$9.12)** attributed to the Astra portion.
-
-This proportional split was used instead of a raw token-pricing total because the raw calculation came out roughly 5x higher than the observed in-app total across *both* models combined — the public per-token rate card doesn't map 1:1 to the app's actual credit meter (likely a plan-level discount or different effective multiplier not published), so the observed total was treated as ground truth and split proportionally rather than trusting the raw calculation.
 
 ---
 
