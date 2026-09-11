@@ -2,6 +2,17 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { Chess } from 'chess.js';
 import { chooseMove } from './search.js';
+import { knightFacesRight } from './piece-orientation.js';
+
+test('knights face inward on every file and rank, reversing in the flipped 2D view', () => {
+  for (const file of 'abcdefgh') for (let rank = 1; rank <= 8; rank++) {
+    const square = file + rank;
+    const facesRight = 'abcd'.includes(file);
+    assert.equal(knightFacesRight(square), facesRight, square);
+    assert.equal(knightFacesRight(square, 'w'), facesRight, square);
+    assert.equal(knightFacesRight(square, 'b'), !facesRight, `${square} flipped`);
+  }
+});
 
 test('computer returns legal moves at every level without mutating the game', () => {
   for (const level of ['easy', 'medium', 'hard']) {

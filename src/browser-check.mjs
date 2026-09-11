@@ -5,7 +5,7 @@ const browser = await chromium.launch({ channel: 'msedge', headless: true, args:
 const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
 const errors = [];
 page.on('pageerror', error => errors.push(error.message));
-await page.goto('http://127.0.0.1:4178');
+await page.goto(process.env.CHESS_URL || 'http://127.0.0.1:4178');
 await page.locator('canvas').waitFor();
 await page.locator('#move-input').fill('e4');
 await page.locator('#move-form button').click();
@@ -44,6 +44,7 @@ await page.waitForTimeout(300);
 assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
 await page.screenshot({ path: 'chess-mobile.png' });
 for (const promotion of ['q', 'r', 'b', 'n']) {
+  await page.waitForFunction(() => document.querySelector('#computer-turn').textContent !== 'THINKING');
   const pgn = new Chess('7k/P7/8/8/8/8/8/7K w - - 0 1').pgn();
   await page.evaluate(({ pgn }) => localStorage.setItem('atelier-chess', JSON.stringify({ pgn, human: 'w', level: 'easy' })), { pgn });
   await page.reload();

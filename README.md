@@ -4,9 +4,9 @@ A fully playable 3D (and 2D) chess game against a local computer opponent — bu
 
 **▶ Play it live:** https://yortch.github.io/chess3dastra/ *(GitHub Pages, static, no server)*
 
-| 3D — light | 2D — dark |
-|---|---|
-| ![3D board, light theme](docs/screenshots/3d-light.png) | ![2D board, dark theme](docs/screenshots/2d-dark.png) |
+| 3D — dark | 2D — dark |
+| --- | --- |
+| ![3D board, dark theme](docs/screenshots/3d-dark.png) | ![2D board, dark theme](docs/screenshots/2d-dark.png) |
 
 Full chess rules (castling, en passant, promotion, draws), three computer difficulty levels, click-or-keyboard moves, algebraic notation entry, undo, move history, captures list, light/dark themes, and a saved game that survives a reload — all in one self-contained `index.html`.
 
@@ -41,7 +41,7 @@ From prompt 2, it added a second, independent 2D rendering path (a DOM grid of a
 Prompt 3 asked a second, independent agent to critique the implementation with no other context than the source files. It read the code (not just took the first agent's word for it) and returned three demonstrated, reproducible findings:
 
 | Severity | Finding | Where |
-|---|---|---|
+| --- | --- | --- |
 | Medium | If WebGL fails to initialize, the *entire* board area — including the independent 2D view — was destroyed at startup, so a "no 3D" fallback still left the user with no playable board at all. | `app.js` renderer init |
 | Low | Submitting a move via the notation input dropped keyboard focus after the computer replied, breaking rapid keyboard-only play. | `app.js` move submission / focus handling |
 | Low | The promotion and "new game" `<dialog>` elements had no accessible name for screen readers. | `index.html` dialogs |
@@ -61,6 +61,10 @@ Prompt 4 asked the model to fix all three. It did, then wrote three new dedicate
 - **Online multiplayer** — currently local-only vs. computer
 - **Testing the no-WebGL path in real low-end/GPU-restricted environments**, not just a simulated `getContext` override
 
+### User acceptance findings
+
+After actually *playing* the live game rather than only reading the code, a new issue surfaced that neither the model nor the rubber-duck pass had caught: the 3D knights weren't rendered sideways (in profile) the way the 2D knights already were. This came from the user's own chess-board familiarity, not from any testing tool or second AI review.
+
 ---
 
 ## Time and AI credits used
@@ -68,10 +72,14 @@ Prompt 4 asked the model to fix all three. It did, then wrote three new dedicate
 This was a single continuous GitHub Copilot app session. The first four prompts above (initial build → 2D view → rubber-duck review → fixes) were built using **GPT‑6‑Astra**, before the session's model was later switched to Claude Sonnet 5 for an unrelated follow-up (this GitHub Pages deployment).
 
 | Metric (GPT‑6‑Astra portion only) | Value |
-|---|---|
+| --- | --- |
 | Session time (first response to last response) | **~41 minutes** |
 | AI credits used | **~912 credits** |
 | Dollar cost | **$9.12** (1 AI credit = $0.01 USD) |
+| Lines of code | **~1,235** (all hand-written HTML/JS in `src/`, template + application + tests) |
+| Automated tests | **6 unit tests** (`chess.test.mjs`, rules/engine/orientation) + **4 Playwright browser suites** (3D, 2D, resilience/accessibility, knight orientation) |
+| Test cases (assertions across all suites) | **~75** |
+| Approximate test coverage | **100% line / ~95% branch** on the Node-testable rules, engine, and orientation logic (measured with `node --test --experimental-test-coverage`); UI rendering (`app.js`, `flat-board.js`) is exercised end-to-end by the Playwright suites but isn't instrumented for a numeric percentage |
 
 Session time is measured from the timestamp of Astra's first reply to its last reply in this session (spanning the four prompts above), as reported by the platform's own usage records — not a manual stopwatch.
 
@@ -116,4 +124,4 @@ npm test        # rules/engine unit tests
 
 ---
 
-*Built with the [GitHub Copilot app](https://github.com/features/copilot). This README and the findings above were generated as part of the same session that built the game.*
+*Built with the* [*GitHub Copilot app*](https://github.com/features/copilot)*. This README and the findings above were generated as part of the same session that built the game.*
