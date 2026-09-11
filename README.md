@@ -1,6 +1,6 @@
 # chess3dastra
 
-A fully playable 3D (and 2D) chess game against a local computer opponent — built end-to-end in the [GitHub Copilot app](https://github.com/features/copilot) as a hands-on test of **GPT‑6‑Astra**.
+A fully playable 3D (and 2D) chess game against a local computer opponent — built end-to-end in the [GitHub Copilot app](https://github.com/features/copilot) as a hands-on test of **GPT-6 Astra**.
 
 **▶ Play it live:** https://yortch.github.io/chess3dastra/ *(GitHub Pages, static, no server)*
 
@@ -14,7 +14,7 @@ Full chess rules (castling, en passant, promotion, draws), three computer diffic
 
 ## The experiment
 
-This repo exists to document a real, unscripted session testing **GPT‑6‑Astra** on a non-trivial, self-contained build task: a 3D game with an AI opponent, built from a single one-line prompt, then iterated on — all inside the [GitHub Copilot app](https://github.com/features/copilot).
+This repo exists to document a real, unscripted session testing **GPT-6 Astra** on a non-trivial, self-contained build task: a 3D game with an AI opponent, built from a single one-line prompt, then iterated on — all inside the [GitHub Copilot app](https://github.com/features/copilot).
 
 ### Prompts used, verbatim, in order
 
@@ -69,9 +69,9 @@ After actually *playing* the live game rather than only reading the code, a new 
 
 ## Time and AI credits used
 
-This was a single continuous GitHub Copilot app session. The first four prompts above (initial build → 2D view → rubber-duck review → fixes) were built using **GPT‑6‑Astra**, before the session's model was later switched to Claude Sonnet 5 for an unrelated follow-up (this GitHub Pages deployment).
+This was a single continuous GitHub Copilot app session. The first four prompts above (initial build → 2D view → rubber-duck review → fixes) were built using **GPT-6 Astra**, before the session's model was later switched to Claude Sonnet 5 for an unrelated follow-up (this GitHub Pages deployment).
 
-| Metric (GPT‑6‑Astra portion only) | Value |
+| Metric (GPT-6 Astra portion only) | Value |
 | --- | --- |
 | Session time (first response to last response) | **~41 minutes** |
 | AI credits used | **~912 credits** |
