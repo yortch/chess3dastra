@@ -70,8 +70,7 @@ This was a single continuous GitHub Copilot app session. The first four prompts 
 | Metric (GPT‑6‑Astra portion only) | Value |
 |---|---|
 | Session time (first response to last response) | **~41 minutes** |
-| AI credits used (observed in-app) | **~650** |
-| AI credits (calculated from token pricing, see below) | **~4,435** |
+| AI credits used (estimated) | **~912** |
 | API calls | 53 |
 | Input tokens | 3,620,352 |
 | Output tokens | 32,445 |
@@ -82,33 +81,28 @@ Session time is measured from the timestamp of Astra's first reply to its last r
 
 The input/cache totals are large relative to the output because the agent repeatedly re-read its own growing source files, ran multiple rounds of headless-browser tests, and inspected screenshots as part of self-verification before presenting each result as done — this is working context, not user-authored input.
 
-### Two different credit numbers, and why they don't match
+### How the ~912 figure was derived
 
-Two credit figures are shown above, and they disagree by roughly 7x:
+The Copilot app's own in-session credit counter tracks the *whole* session (Astra build + the later Claude Sonnet 5 follow-up work), not per-model, so it can't be read off directly for "Astra only." To isolate Astra's share:
 
-- **~650** is what was observed in the Copilot app's own usage/credit indicator during this session.
-- **~4,435** is calculated below from the token counts above using [GitHub's published per-token pricing for GPT‑6‑Astra](https://docs.github.com/en/enterprise-cloud@latest/copilot/reference/copilot-billing/models-and-pricing), where 1 AI credit = $0.01 USD.
+1. [GitHub's published per-token pricing](https://docs.github.com/en/enterprise-cloud@latest/copilot/reference/copilot-billing/models-and-pricing) (1 AI credit = $0.01 USD) was applied to both models' actual token counts from this session:
 
-**GPT‑6‑Astra pricing (Default tier, ≤272K input tokens per request — applicable here, since input averaged ~68K tokens/call):**
+   **GPT‑6‑Astra** (Default tier, ≤272K input tokens/request): Input $10.00/1M, Cached input $1.00/1M, Cache write $12.50/1M, Output $50.00/1M
 
-| Token type | Rate per 1M tokens |
-|---|---|
-| Input | $10.00 |
-| Cached input | $1.00 |
-| Cache write | $12.50 |
-| Output | $50.00 |
+   | Token type | Tokens | Cost |
+   |---|--:|--:|
+   | Input | 3,620,352 | $36.20 |
+   | Cached input | 3,367,302 | $3.37 |
+   | Cache write | 252,891 | $3.16 |
+   | Output | 32,445 | $1.62 |
+   | **Total** | | **$44.35** |
 
-**Applied to this session's totals:**
+   **Claude Sonnet 5:** Input $2.00/1M, Cached input $0.20/1M, Cache write $2.50/1M, Output $10.00/1M → **$8.49** total.
 
-| Token type | Tokens | Rate | Cost |
-|---|--:|--:|--:|
-| Input | 3,620,352 | $10.00 /1M | $36.20 |
-| Cached input | 3,367,302 | $1.00 /1M | $3.37 |
-| Cache write | 252,891 | $12.50 /1M | $3.16 |
-| Output | 32,445 | $50.00 /1M | $1.62 |
-| **Total** | | | **$44.35 → ≈ 4,435 AI credits** |
+2. This gives Astra as **83.9%** of the combined calculated cost ($44.35 of $52.85 combined).
+3. That 83.9% share was applied to the session's actual observed credit total (**1,087** credits, whole session) → **~912 credits** attributed to the Astra portion.
 
-The gap between the two numbers is left unresolved here rather than papered over: the in-app credit meter may apply a different accounting model (e.g. a flat per-request or plan-tier multiplier) than the public per-token rate card used for the calculation above, so they aren't expected to match exactly — but a ~7x difference suggests they're measuring genuinely different things, not just rounding.
+This proportional split was used instead of the raw token-pricing total ($44.35 → ~4,435 credits) because the calculated figure is roughly 5x higher than the observed in-app total across *both* models combined — the public per-token rate card doesn't map 1:1 to the app's actual credit meter (likely a plan-level discount or different effective multiplier not published), so the observed total was treated as ground truth and split proportionally rather than trusting the raw calculation.
 
 ---
 
