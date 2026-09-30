@@ -83,8 +83,19 @@ try {
   }
   await loadPosition(new Chess('4r2k/8/8/8/8/8/8/4K3 w - - 0 1'));
   assert.match(await square('e1').getAttribute('class'), /check/);
+  assert.deepEqual(await page.locator('#difficulty option').allTextContents(), [
+    'Casual / one move ahead',
+    'Balanced / two moves ahead',
+    'Challenging / deeper search'
+  ]);
+  await loadPosition(new Chess('7k/6Q1/6K1/8/8/8/8/8 b - - 0 1'), 'b');
+  assert.equal(await page.locator('#status').textContent(), 'Checkmate.');
+  assert.match(await page.locator('#status-detail').textContent(), /computer wins by checkmate/i);
+  await loadPosition(new Chess('7k/5K2/6Q1/8/8/8/8/8 b - - 0 1'), 'b');
+  assert.equal(await page.locator('#status').textContent(), 'Draw.');
+  assert.match(await page.locator('#status-detail').textContent(), /Stalemate/);
   assert.deepEqual(errors, []);
-  console.log('2D passed: keyboard/click moves, view switching during analysis, persistence, flips, undo, mobile, play black, captures, castling, en passant, all promotions, check.');
+  console.log('2D passed: keyboard/click moves, view switching, persistence, flips, undo, mobile, play black, special moves, check, checkmate, stalemate, difficulty labels.');
 } finally {
   await browser.close();
 }

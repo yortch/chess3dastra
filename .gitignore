@@ -1,4 +1,9 @@
 node_modules/
+dist/
+.ms/
+.impeccable/
+managed-runtime/
+src/chess.html
 *.png
 !docs/screenshots/*.png
 chess-*.png

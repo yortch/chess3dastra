@@ -117,10 +117,18 @@ docs/screenshots/    ← images used in this README
 ```bash
 cd src
 npm install
-npm run build   # bundles into ../index.html
+npm run build   # bundles into ../index.html and ../dist/index.html
 npm start       # serves it at http://127.0.0.1:4178
 npm test        # rules/engine unit tests
 ```
+
+## Copilot Managed runtime
+
+This game can also run as a Microsoft Copilot Managed Runtime app. Its local-only chess engine needs no data connectors or service credentials. From the repository root, run `npm run build` to produce CSP-compatible HTML, CSS, application JavaScript, and a same-origin worker in `dist`. The same build updates the standalone root `index.html` used by GitHub Pages.
+
+The deployed edition uses a separate platform-managed Git repository. Copy all four files from `dist` into that repository's `client` directory, run its `npm run build`, commit and push there, then run `ms app deploy` from its checkout. Do not copy the standalone root HTML: its inline scripts/styles and blob worker are blocked by the managed player's CSP. Its `ms.config.json` contains the managed app binding; the chess UI includes its own controls and status.
+
+Run `node src/browser-csp-check.mjs` after building to exercise the managed edition under a CSP that permits only same-origin scripts, styles, and workers, including at a nested asset path.
 
 ---
 

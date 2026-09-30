@@ -1,75 +1,68 @@
 <!doctype html>
-<html lang="en" data-accent="coral" data-surface="flat" data-geometry="compact" data-density="comfortable" data-type="neutral" data-ambient="none">
+<html lang="en" data-mode="light" data-accent="azure" data-surface="outline" data-geometry="sharp" data-density="compact" data-type="neutral" data-ambient="flat">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Atelier / 3D Chess</title>
-<script>
-  (() => {
-    const param = new URLSearchParams(window.location.search).get("scoutTheme");
-    const theme =
-      param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-    document.documentElement.setAttribute("data-theme", theme);
-  })();
-</script>
+<meta name="description" content="A complete local chess game with switchable 3D and 2D boards and three computer difficulty levels.">
+<title>Field 64 / Local 3D Chess</title>
 <style>
 :root {
   color-scheme: light;
-  --cp-bg: #f7f4ef;
-  --cp-bg-elevated: #fcfbf8;
+  --cp-bg: #eef4f7;
+  --cp-bg-elevated: #f8fbfc;
   --cp-surface: #ffffff;
-  --cp-surface-soft: #f5f5f5;
-  --cp-border: #dedede;
-  --cp-border-strong: #919191;
-  --cp-text: #242424;
-  --cp-text-muted: #5c5c5c;
-  --cp-text-soft: #6f6f6f;
-  --cp-accent: #b11f4b;
-  --cp-accent-hover: #9a1a41;
-  --cp-accent-soft: rgba(177, 31, 75, 0.08);
+  --cp-surface-soft: #e5eef2;
+  --cp-border: #c6d4dc;
+  --cp-border-strong: #718795;
+  --cp-text: #14232c;
+  --cp-text-muted: #4b626f;
+  --cp-text-soft: #617985;
+  --cp-accent: #0876a6;
+  --cp-accent-hover: #05638d;
+  --cp-accent-soft: rgba(8, 118, 166, 0.1);
   --cp-accent-fg: #ffffff;
   --cp-success: #16a34a;
   --cp-danger: #dc2626;
   --cp-warning: #f59e0b;
   --cp-link: #0078d4;
-  --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+  --cp-shadow: 0 14px 36px rgba(20, 35, 44, 0.12);
   --cp-overlay: rgba(255, 255, 255, 0.8);
-  --cp-panel: rgba(255, 255, 255, 0.86);
+  --cp-panel: rgba(255, 255, 255, 0.9);
   --cp-panel-strong: rgba(255, 255, 255, 0.96);
   --cp-sheen: rgba(255, 255, 255, 0.55);
-  --cp-highlight: rgba(177, 31, 75, 0.12);
+  --cp-highlight: rgba(8, 118, 166, 0.12);
 }
 html[data-theme="dark"] {
   color-scheme: dark;
-  --cp-bg: #3d3b3a;
-  --cp-bg-elevated: #343231;
-  --cp-surface: #292929;
-  --cp-surface-soft: #2e2e2e;
-  --cp-border: #474747;
-  --cp-border-strong: #5f5f5f;
-  --cp-text: #dedede;
-  --cp-text-muted: #919191;
-  --cp-text-soft: #b0b0b0;
-  --cp-accent: #fd8ea1;
-  --cp-accent-hover: #fb7b91;
-  --cp-accent-soft: rgba(253, 142, 161, 0.14);
-  --cp-accent-fg: #1a1a1a;
+  --cp-bg: #111b21;
+  --cp-bg-elevated: #16242c;
+  --cp-surface: #1b2b34;
+  --cp-surface-soft: #21343e;
+  --cp-border: #344b58;
+  --cp-border-strong: #607986;
+  --cp-text: #dce9ef;
+  --cp-text-muted: #91a8b4;
+  --cp-text-soft: #b4c6cf;
+  --cp-accent: #57c2ef;
+  --cp-accent-hover: #7bd0f3;
+  --cp-accent-soft: rgba(87, 194, 239, 0.14);
+  --cp-accent-fg: #071218;
   --cp-success: #4ade80;
   --cp-danger: #f87171;
   --cp-warning: #fbbf24;
   --cp-link: #4da6ff;
   --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
-  --cp-overlay: rgba(41, 41, 41, 0.88);
-  --cp-panel: rgba(41, 41, 41, 0.72);
-  --cp-panel-strong: rgba(41, 41, 41, 0.96);
+  --cp-overlay: rgba(17, 27, 33, 0.9);
+  --cp-panel: rgba(27, 43, 52, 0.8);
+  --cp-panel-strong: rgba(27, 43, 52, 0.96);
   --cp-sheen: rgba(255, 255, 255, 0.04);
-  --cp-highlight: rgba(253, 142, 161, 0.12);
+  --cp-highlight: rgba(87, 194, 239, 0.12);
 }
-:root{--space:4px;--radius:10px;--mono:Consolas,"Courier New",Courier,monospace}
+:root{--space:4px;--radius:4px;--mono:"JetBrains Mono",Consolas,"Courier New",Courier,monospace}
 *{box-sizing:border-box}
 body{margin:0;background:var(--cp-bg);color:var(--cp-text);font-family:"Segoe UI",Aptos,Calibri,-apple-system,BlinkMacSystemFont,sans-serif}
 button,select,input{font:inherit;color:inherit}
-button,select{border:1px solid var(--cp-border);background:var(--cp-surface);border-radius:var(--radius);padding:10px 14px}
+button,select{border:1px solid var(--cp-border);background:var(--cp-surface);border-radius:var(--radius);padding:9px 12px}
 button{cursor:pointer;transition:background .15s}
 button:hover{background:var(--cp-accent-soft);border-color:var(--cp-accent)}
 button:disabled{opacity:.45;cursor:not-allowed}
@@ -78,13 +71,13 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .primary:hover{background:var(--cp-accent-hover)}
 #github-link{display:inline-flex;align-items:center;border:1px solid var(--cp-border);background:var(--cp-surface);border-radius:var(--radius);padding:10px 14px;color:inherit;text-decoration:none;font-weight:500;transition:background .15s}
 #github-link:hover{background:var(--cp-accent-soft);border-color:var(--cp-accent)}
-header{display:flex;align-items:center;justify-content:space-between;padding:24px 32px;border-bottom:1px solid var(--cp-border)}
+header{display:flex;align-items:center;justify-content:space-between;padding:18px 28px;border-bottom:1px solid var(--cp-border);background:var(--cp-bg-elevated)}
 .header-actions{display:flex;align-items:center;gap:10px}
-.brand{font-weight:650;font-size:20px;letter-spacing:-.6px}.brand span{color:var(--cp-text-muted);font-weight:400}
+.brand{font-weight:700;font-size:18px;letter-spacing:-.5px}.brand span{color:var(--cp-text-muted);font-weight:400}
 .eyebrow{font:11px var(--mono);letter-spacing:2px;text-transform:uppercase;color:var(--cp-text-muted)}
-main{display:grid;grid-template-columns:minmax(0,1fr) 304px;min-height:calc(100vh - 83px);max-width:1800px;margin:auto}
+main{display:grid;grid-template-columns:minmax(0,1fr) 304px;min-height:calc(100vh - 65px);max-width:1800px;margin:auto;background:var(--cp-bg)}
 .arena{position:relative;min-width:0;display:flex;flex-direction:column}
-.player-bar{display:flex;align-items:center;gap:12px;padding:24px 32px;min-height:84px}
+.player-bar{display:flex;align-items:center;gap:12px;padding:18px 28px;min-height:70px}
 .stone{width:12px;height:12px;border-radius:50%;background:var(--cp-text);border:1px solid var(--cp-border-strong)}
 .stone.white{background:var(--cp-bg-elevated)}
 html[data-theme="dark"] .stone{background:var(--cp-surface)}
@@ -124,7 +117,7 @@ html[data-theme="dark"] .dark .square-coordinate{color:var(--cp-text)}
 .view-mode{display:flex;gap:4px;border-right:1px solid var(--cp-border);padding-right:8px}
 .view-mode button[aria-pressed="true"]{background:var(--cp-accent);color:var(--cp-accent-fg);border-color:var(--cp-accent)}
 .hintline{text-align:center;font-size:12px;color:var(--cp-text-muted);padding:0 16px 8px}
-aside{border-left:1px solid var(--cp-border);background:var(--cp-bg-elevated);padding:28px 24px;display:flex;flex-direction:column;gap:24px}
+aside{border-left:1px solid var(--cp-border);background:var(--cp-bg-elevated);padding:24px 20px;display:flex;flex-direction:column;gap:20px}
 h1{font-size:26px;font-weight:500;letter-spacing:-.8px;margin:8px 0}
 #status-detail{font-size:13px;line-height:1.6;color:var(--cp-text-muted);margin:0}
 .controls{display:grid;gap:12px}
@@ -141,7 +134,7 @@ footer{margin-top:auto;font-size:11px;line-height:1.6;color:var(--cp-text-muted)
 .notation{display:flex;gap:8px;margin-top:12px}.notation input{width:100%;min-width:0;background:var(--cp-surface);border:1px solid var(--cp-border);border-radius:var(--radius);padding:8px;font:12px var(--mono)}
 .notation button{font-size:12px;padding:8px}
 #notice{font-size:12px;color:var(--cp-danger);line-height:1.5}
-dialog{border:1px solid var(--cp-border);border-radius:16px;padding:24px;background:var(--cp-surface);color:var(--cp-text);max-width:90vw}
+dialog{border:1px solid var(--cp-border);border-radius:var(--radius);padding:24px;background:var(--cp-surface);color:var(--cp-text);max-width:90vw}
 dialog::backdrop{background:var(--cp-overlay)}
 dialog h2{font-size:20px;margin:0 0 16px}.promotion-choices{display:flex;gap:8px;flex-wrap:wrap}
 @media(max-width:850px){header{padding:20px}main{grid-template-columns:1fr}aside{border-left:0;border-top:1px solid var(--cp-border);display:grid;grid-template-columns:1fr 1fr}#stage{height:58vh;min-height:360px}.player-bar{padding:16px 24px}footer{grid-column:1/-1}}
@@ -149,11 +142,11 @@ dialog h2{font-size:20px;margin:0 0 16px}.promotion-choices{display:flex;gap:8px
 </style>
 </head>
 <body>
-<header><div class="brand">Atelier <span>/ 3D Chess</span></div><div class="eyebrow header-note">A quiet place to think.</div><div class="header-actions"><a id="github-link" href="https://github.com/yortch/chess3dastra" target="_blank" rel="noopener noreferrer" aria-label="View source on GitHub">GitHub</a><button id="theme" aria-label="Toggle light or dark theme">Appearance</button></div></header>
+<header><div class="brand">Field 64 <span>/ Local Chess</span></div><div class="eyebrow header-note">LOCAL ENGINE / COMPLETE RULES</div><div class="header-actions"><a id="github-link" href="https://github.com/yortch/chess3dastra" target="_blank" rel="noopener noreferrer" aria-label="View source on GitHub">Source</a><button id="theme" aria-label="Toggle light or dark theme">Appearance</button></div></header>
 <main>
 <section class="arena" aria-label="Chess board">
   <div class="player-bar"><div id="computer-stone" class="stone"></div><div><div class="player-name">Computer</div><div id="opponent-level" class="player-sub">Balanced opponent</div></div><div id="computer-turn" class="turn-label"></div></div>
-  <div id="stage" aria-label="Interactive chessboard. Select a piece, then a highlighted square. You can also use the move notation field."><div id="flat-view" hidden><div id="flat-board" role="group" aria-label="2D chessboard"></div></div></div>
+  <div id="stage" aria-label="Interactive chessboard. Select a piece, then a highlighted square. You can also use the move notation field." aria-describedby="board-hint render-notice"><div id="flat-view" hidden><div id="flat-board" role="group" aria-label="2D chessboard"></div></div></div>
   <div class="view-controls"><div class="view-mode" role="group" aria-label="Board view"><button id="view-3d" aria-pressed="true">3D</button><button id="view-2d" aria-pressed="false">2D</button></div><button id="rotate">Rotate board</button><button id="top">Top view</button><button id="reset-view">Reset view</button></div>
   <div id="board-hint" class="hintline">Click a piece, then a square. Drag to orbit. Scroll to zoom.</div>
   <div id="render-notice" class="hintline" role="status" hidden></div>
