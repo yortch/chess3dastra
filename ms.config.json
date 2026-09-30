@@ -1,0 +1,17 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/Managed-Apps/main/schemas/ms.config.schema.json",
+  "version": "0.0",
+  "appId": "7c4a2402-b91d-4a25-b2b9-91661cf246f6",
+  "appDisplayName": "Field 64 Chess",
+  "environmentId": "e4ca4dba-198d-e22f-b555-6505fa798101",
+  "description": "Play 3D or 2D chess against a local computer opponent",
+  "repoType": "none",
+  "cloud": "public",
+  "buildPath": "./dist",
+  "buildCommand": "npm run build",
+  "buildEntryPoint": "index.html",
+  "connectionReferences": {},
+  "appSettings": {
+    "showHeader": false
+  }
+}

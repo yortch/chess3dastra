@@ -117,10 +117,16 @@ docs/screenshots/    ← images used in this README
 ```bash
 cd src
 npm install
-npm run build   # bundles into ../index.html
+npm run build   # bundles into ../index.html and ../dist/index.html
 npm start       # serves it at http://127.0.0.1:4178
 npm test        # rules/engine unit tests
 ```
+
+## Copilot Managed runtime
+
+This repository is also configured as a Microsoft managed app (`ms.config.json`). Its local-only chess engine needs no data connectors or service credentials. From the repository root, run `npm run build` to produce the self-contained `dist/index.html` used by the managed runtime. The same build updates the root `index.html` used by GitHub Pages.
+
+With the globally installed `@microsoft/managed-apps-cli` and a signed-in work or school account, `ms app pack` validates the local package. After reviewing and pushing source changes, `ms app deploy` publishes that package to the environment identified by `ms.config.json`. The managed app is configured without the platform header because the chess game includes its own controls and status.
 
 ---
 

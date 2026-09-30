@@ -1,4 +1,8 @@
 node_modules/
+dist/
+.ms/
+.impeccable/
+src/chess.html
 *.png
 !docs/screenshots/*.png
 chess-*.png

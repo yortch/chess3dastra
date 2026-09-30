@@ -450,7 +450,9 @@ function setView(nextView, persist = true) {
 $('view-2d').onclick = () => setView('2d');
 $('view-3d').onclick = () => setView('3d');
 $('theme').onclick = () => {
-  document.documentElement.dataset.theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+  const theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+  document.documentElement.dataset.theme = theme;
+  document.documentElement.dataset.mode = theme;
   applyTheme();
 };
 const sizeObserver = new ResizeObserver(() => {
