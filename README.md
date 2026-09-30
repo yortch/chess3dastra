@@ -124,9 +124,9 @@ npm test        # rules/engine unit tests
 
 ## Copilot Managed runtime
 
-This repository is also configured as a Microsoft managed app (`ms.config.json`). Its local-only chess engine needs no data connectors or service credentials. From the repository root, run `npm run build` to produce the self-contained `dist/index.html` used by the managed runtime. The same build updates the root `index.html` used by GitHub Pages.
+This game can also run as a Microsoft Copilot Managed Runtime app. Its local-only chess engine needs no data connectors or service credentials. From the repository root, run `npm run build` to produce the self-contained `dist/index.html`. The same build updates the root `index.html` used by GitHub Pages.
 
-With the globally installed `@microsoft/managed-apps-cli` and a signed-in work or school account, `ms app pack` validates the local package. After reviewing and pushing source changes, `ms app deploy` publishes that package to the environment identified by `ms.config.json`. The managed app is configured without the platform header because the chess game includes its own controls and status.
+The deployed edition uses a separate platform-managed Git repository. Copy the built root `index.html` into that repository, run its `npm run build`, commit and push there, then run `ms app deploy` from its checkout. Its `ms.config.json` contains the managed app binding; the chess UI includes its own controls and status.
 
 ---
 
