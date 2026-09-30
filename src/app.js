@@ -1,3 +1,4 @@
+import './theme.js';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { Chess } from 'chess.js';
@@ -6,6 +7,7 @@ import { knightFacesRight } from './piece-orientation.js';
 
 const $ = id => document.getElementById(id);
 const game = new Chess();
+const engineUrl = EXTERNAL_ENGINE ? new URL('./engine.js', document.currentScript.src).href : null;
 const names = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 let human = 'w', selected = null, legal = [], worker = null, thinking = false, pending = null;
 let view = '3d', flatBottom = 'w';
@@ -304,10 +306,13 @@ function computerMove() {
   if (game.turn() === human || game.isGameOver()) return;
   cancelComputer();
   thinking = true; updateUI();
-  const url = URL.createObjectURL(new Blob([ENGINE_SOURCE], { type: 'text/javascript' }));
+  const url = engineUrl || URL.createObjectURL(new Blob([ENGINE_SOURCE], { type: 'text/javascript' }));
   try { worker = new Worker(url); }
-  catch (error) { URL.revokeObjectURL(url); engineError(error.message); return; }
-  URL.revokeObjectURL(url);
+  catch (error) {
+    if (!engineUrl) URL.revokeObjectURL(url);
+    engineError(error.message); return;
+  }
+  if (!engineUrl) URL.revokeObjectURL(url);
   worker.onmessage = ({ data }) => {
     cancelComputer();
     if (data.error) { engineError(data.error); return; }

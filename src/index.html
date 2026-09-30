@@ -5,15 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="A complete local chess game with switchable 3D and 2D boards and three computer difficulty levels.">
 <title>Field 64 / Local 3D Chess</title>
-<script>
-  (() => {
-    const param = new URLSearchParams(window.location.search).get("scoutTheme");
-    const theme =
-      param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-    document.documentElement.setAttribute("data-theme", theme);
-    document.documentElement.setAttribute("data-mode", theme);
-  })();
-</script>
 <style>
 :root {
   color-scheme: light;
